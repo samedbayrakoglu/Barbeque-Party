@@ -23,6 +23,7 @@ public class RewardManager : MonoBehaviour
 
         eventManager = FindObjectOfType<EventManager>();
         eventManager.OnSpin += SpinOrder;
+        eventManager.OnRewadrCollectionComplete += CheckAllContainersCollected;
     }
 
     private void SetupContainers()
@@ -44,8 +45,6 @@ public class RewardManager : MonoBehaviour
 
     private void SelectionCompleteCallback(UIFoodContainer container)
     {
-        Debug.Log("time for UI");
-        
         if(eventManager != null)
             eventManager.RewardSelected(container);
     }
@@ -82,12 +81,30 @@ public class RewardManager : MonoBehaviour
             {
                 foodContainers[i].Selected();
 
+                selectedContainerIdxs.Add(i);
+
                 break;
             }
 
             foodContainers[i].Glow();
 
             yield return new WaitForSeconds(0.2f);              
+        }
+    }
+
+    private void CheckAllContainersCollected()
+    {
+        if(foodContainers.Count == selectedContainerIdxs.Count)
+            ResetGame();
+    }
+
+    private void ResetGame()
+    {
+        selectedContainerIdxs.Clear();
+
+        for (int i = 0; i < foodContainers.Count; i++)
+        {
+            foodContainers[i].Reset();
         }
     }
 
@@ -112,5 +129,6 @@ public class RewardManager : MonoBehaviour
         }
 
         eventManager.OnSpin -= SpinOrder;
+        eventManager.OnRewadrCollectionComplete -= CheckAllContainersCollected;
     }
 }

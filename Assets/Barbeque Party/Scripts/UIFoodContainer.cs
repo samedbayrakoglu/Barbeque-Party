@@ -18,17 +18,19 @@ public class UIFoodContainer : MonoBehaviour
 
     [Header(" Settings ")]
     public FoodContainerState state;
-    public RewardType rewardType;
+    public RewardData rewardData;
+
+    private EventManager eventManager;
 
     [Header(" Actions ")]
     public Action<UIFoodContainer> OnSelectionComplete;
 
 
-    public void Configure(RewardData rewardData)
+    public void Configure(RewardData _rewardData)
     {
-        rewardType = rewardData.type;
+        rewardData = _rewardData;
 
-        foodIcon.sprite = rewardData.foodIcon;
+        foodIcon.sprite = _rewardData.foodIcon;
     }
 
     public void Reset()
@@ -58,6 +60,12 @@ public class UIFoodContainer : MonoBehaviour
 
     public void Selected()
     {
+        state = FoodContainerState.selected;
+        
+        // subscribe to reward collected event
+        eventManager = FindObjectOfType<EventManager>();
+        eventManager.OnRewadrCollectionComplete += Disable;
+
         glowBG.gameObject.SetActive(true);
 
         glowBG.DOFade(0f, 0.2f).SetLoops(7, LoopType.Yoyo).OnComplete(() => 
@@ -74,7 +82,13 @@ public class UIFoodContainer : MonoBehaviour
 
     public void Disable()
     {
+        if(state == FoodContainerState.unselected)
+            return;
+            
+        eventManager.OnRewadrCollectionComplete -= Disable;
 
+        foodIcon.gameObject.SetActive(false);
+        disabledBG.gameObject.SetActive(true);
     }
 
 }

@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 5
   foodIcon: {fileID: 21300000, guid: 248143327f9d30c4697cdfb4d2a0e943, type: 3}
+  foodPrefab: {fileID: 6879965503118801494, guid: 95ae0a1b9d1c4314abaf47355a8f7015,
+    type: 3}

@@ -13,6 +13,7 @@ public class SpinButton : ButtonBase
         base.Start();
 
         eventManager = FindObjectOfType<EventManager>();
+        eventManager.OnRewadrCollectionComplete += ReadyForSpin;
     }
 
     private void ReadyForSpin()
@@ -30,6 +31,6 @@ public class SpinButton : ButtonBase
 
     private void OnDestroy() 
     {
-       
+       eventManager.OnRewadrCollectionComplete -= ReadyForSpin;
     }
 }

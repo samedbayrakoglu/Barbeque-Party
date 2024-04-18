@@ -9,5 +9,5 @@ public class RewardData : ScriptableObject
     [Header(" Elements")]
     public RewardType type;
     public Sprite foodIcon;
-    
+    public GameObject foodPrefab;
 }
